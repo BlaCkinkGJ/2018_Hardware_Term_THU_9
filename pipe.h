@@ -24,6 +24,9 @@
 // c compiler function header
 #include <stdbool.h>
 
+// user defined header
+#include "ultrasonic.h"
+
 // initialization system
 void _System_Init(void);
 
@@ -41,7 +44,6 @@ void _DMA_Init(void);
 // user defined function declaration
 void delay(const int);
 
-// global variables are HERE
-vu32 lux[2];
+
 
 #endif

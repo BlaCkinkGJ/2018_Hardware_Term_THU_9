@@ -7,6 +7,7 @@
 int main(){
 	_System_Init();
 	while(true){
+		int32_t dist = ultra_get_distance();
 		// execution HERE
 	}
 }

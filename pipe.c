@@ -28,6 +28,7 @@ void _RCC_Init(void){
                            | RCC_APB2Periph_GPIOD)
                            , ENABLE);
     */
+   ultra_RCC_Init();
 }
 
 void _GPIO_Init(void){
