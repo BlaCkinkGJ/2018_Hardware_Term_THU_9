@@ -1,10 +1,50 @@
 #include "pipe.h"
 
+
+// @TODO 아래의 내용을 확인하도록 할 것.
+static void ultra_RCC_Init(){
+    RCC_APB2PeriphClockCmd((RCC_APB2Periph_GPIOA  // ECHO
+                           |RCC_APB2Periph_GPIOB), // TRIGGER
+                            ENABLE
+    );
+    RCC_APB1PeriphClockCmd((RCC_APB1Periph_TIM3
+                           |RCC_APB1Periph_TIM4
+                           |RCC_APB1Periph_TIM5),
+                            ENABLE);
+}
+
+static void _ULTRA_Init(){
+    Ultra_InitTypeDef ultra_init_struct;
+    ultra_init_struct.US_TIMER             = TIM3;
+    ultra_init_struct.US_TIMER_TRIG_SOURCE = TIM_TS_TI1FP1;
+    ultra_init_struct.US_TRIG_PORT         = GPIOB;
+    ultra_init_struct.US_TRIG_PIN          = GPIO_Pin_0;
+    ultra_init_struct.US_ECHO_PORT         = GPIOA;
+    ultra_init_struct.US_ECHO_PIN          = GPIO_Pin_6;
+    ultra_sensor_init(&ultra_init_struct);
+
+    ultra_init_struct.US_TIMER             = TIM4;
+    ultra_init_struct.US_TIMER_TRIG_SOURCE = TIM_TS_TI1FP1;
+    ultra_init_struct.US_TRIG_PORT         = GPIOB;
+    ultra_init_struct.US_TRIG_PIN          = GPIO_Pin_1;
+    ultra_init_struct.US_ECHO_PORT         = GPIOA;
+    ultra_init_struct.US_ECHO_PIN          = GPIO_Pin_7;
+    ultra_sensor_init(&ultra_init_struct); 
+
+    ultra_init_struct.US_TIMER             = TIM5;
+    ultra_init_struct.US_TIMER_TRIG_SOURCE = TIM_TS_TI1FP1;
+    ultra_init_struct.US_TRIG_PORT         = GPIOB;
+    ultra_init_struct.US_TRIG_PIN          = GPIO_Pin_2;
+    ultra_init_struct.US_ECHO_PORT         = GPIOA;
+    ultra_init_struct.US_ECHO_PIN          = GPIO_Pin_8;
+    ultra_sensor_init(&ultra_init_struct);
+}
+
+
 void delay(const int num){
     int remain = num;
     while((remain--) > 0);
 }
-
 void _System_Init(void){
 	SystemInit();
 	_RCC_Init();
@@ -20,6 +60,9 @@ void _System_Init(void){
 
     // analog start
 	_ADC_Start();
+
+    // ultra sonic init
+    _ULTRA_Init();
 }
 
 void _RCC_Init(void){

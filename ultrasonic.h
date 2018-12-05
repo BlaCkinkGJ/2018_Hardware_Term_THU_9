@@ -3,18 +3,21 @@
 
 #include "pipe.h"
 
-#define US_TIMER             TIM3
+// @TODO timer trigger source에 관해서 좀 더 알아도록 할 것!
+typedef struct ULTRA_CONF{
+    TIM_TypeDef*  US_TIMER;             // e.g. TIM3
+    uint16_t      US_TIMER_TRIG_SOURCE; // e.g. TIM_TS_TI1FP1
 
-#define US_TRIG_PORT         GPIOB
-#define US_TRIG_PIN          GPIO_Pin_0 // TIM CHANNEL 3
+    GPIO_TypeDef* US_TRIG_PORT;         // e.g. GPIOB
+    uint16_t      US_TRIG_PIN;          // e.g. GPIO_Pin_0
 
-#define US_ECHO_PORT         GPIOA
-#define US_ECHO_PIN          GPIO_Pin_6 // TIM CHANNEL 1
-#define US_TIMER_TRIG_SOURCE TIM_TS_TI1FP1
+    GPIO_TypeDef* US_ECHO_PORT;         // e.g. GPIOA
+    uint16_t      US_ECHO_PIN;          // e.g. GPIO_Pin_6
+}Ultra_InitTypeDef;
 
-void    ultra_RCC_Init();
-void    ultra_sensor_Init();
-int32_t ultra_get_distance();
+void                ultra_sensor_init(Ultra_InitTypeDef *Ultra_InitStruct);
+// if distance more than 3m then returns 0
+uint32_t            ultra_get_distance(TIM_TypeDef* US_TIMER);
 
 
 #endif
