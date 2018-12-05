@@ -46,20 +46,20 @@ void delay(const int num){
     while((remain--) > 0);
 }
 void _System_Init(void){
-	SystemInit();
-	_RCC_Init();
+    SystemInit();
+    _RCC_Init();
     _USART_Init();
-	_GPIO_Init();
+    _GPIO_Init();
     // interrupt setting
     _EXTI_Init();
     _NVIC_Init();
     // analog digital
-	_ADC_Init();
+    _ADC_Init();
     // DMA setting
-	_DMA_Init();
+    _DMA_Init();
 
     // analog start
-	_ADC_Start();
+    _ADC_Start();
 
     // ultra sonic init
     _ULTRA_Init();
@@ -191,21 +191,21 @@ void _ADC_Start(void){
 
 void _DMA_Init(void){
     /* [SAMPLE]
-	DMA_InitTypeDef dma_init_struct;
-	DMA_DeInit(DMA1_Channel1);
-	dma_init_struct.DMA_PeripheralBaseAddr = (uint32_t)&ADC1->DR;
-	dma_init_struct.DMA_MemoryBaseAddr     = (uint32_t) lux;
-	dma_init_struct.DMA_DIR                = DMA_DIR_PeripheralSRC;
-	dma_init_struct.DMA_BufferSize         = 2;
-	dma_init_struct.DMA_PeripheralInc      = DMA_PeripheralInc_Disable;
-	dma_init_struct.DMA_MemoryInc          = DMA_MemoryInc_Enable;
-	dma_init_struct.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Word;
-	dma_init_struct.DMA_MemoryDataSize     = DMA_MemoryDataSize_Word;
-	dma_init_struct.DMA_Mode               = DMA_Mode_Circular;
-	dma_init_struct.DMA_Priority           = DMA_Priority_High;
-	dma_init_struct.DMA_M2M                = DMA_M2M_Disable;
+    DMA_InitTypeDef dma_init_struct;
+    DMA_DeInit(DMA1_Channel1);
+    dma_init_struct.DMA_PeripheralBaseAddr = (uint32_t)&ADC1->DR;
+    dma_init_struct.DMA_MemoryBaseAddr     = (uint32_t) lux;
+    dma_init_struct.DMA_DIR                = DMA_DIR_PeripheralSRC;
+    dma_init_struct.DMA_BufferSize         = 2;
+    dma_init_struct.DMA_PeripheralInc      = DMA_PeripheralInc_Disable;
+    dma_init_struct.DMA_MemoryInc          = DMA_MemoryInc_Enable;
+    dma_init_struct.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Word;
+    dma_init_struct.DMA_MemoryDataSize     = DMA_MemoryDataSize_Word;
+    dma_init_struct.DMA_Mode               = DMA_Mode_Circular;
+    dma_init_struct.DMA_Priority           = DMA_Priority_High;
+    dma_init_struct.DMA_M2M                = DMA_M2M_Disable;
 
-	DMA_Init(DMA1_Channel1, &dma_init_struct);
-	DMA_Cmd(DMA1_Channel1, ENABLE);
+    DMA_Init(DMA1_Channel1, &dma_init_struct);
+    DMA_Cmd(DMA1_Channel1, ENABLE);
     */
 }

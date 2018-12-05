@@ -15,9 +15,9 @@ typedef struct ULTRA_CONF{
     uint16_t      US_ECHO_PIN;          // e.g. GPIO_Pin_6
 }Ultra_InitTypeDef;
 
-void                ultra_sensor_init(Ultra_InitTypeDef *Ultra_InitStruct);
+void     ultra_sensor_init (Ultra_InitTypeDef *Ultra_InitStruct);
 // if distance more than 3m then returns 0
-uint32_t            ultra_get_distance(TIM_TypeDef* US_TIMER);
+uint32_t ultra_get_distance(TIM_TypeDef* US_TIMER);
 
 
 #endif
