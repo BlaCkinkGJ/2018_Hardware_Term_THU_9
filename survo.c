@@ -59,7 +59,7 @@ int main()
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOB,&GPIO_InitStructure);
 
-	GPIO_InitStructure.GPIO_Pin = (GPIO_Pin_3|GPIO_Pin_4|GPIO_Pin_5|GPIO_Pin_6);
+	GPIO_InitStructure.GPIO_Pin = (GPIO_Pin_2|GPIO_Pin_3|GPIO_Pin_4|GPIO_Pin_5);
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOC,&GPIO_InitStructure);
@@ -84,12 +84,15 @@ int main()
 	TIM_Cmd(TIM4,ENABLE);
 
 	while(1){
-		int isUp = GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_6);
-		int isDown = GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_3);
-		int isLeft = GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_4);
-		int isRight = GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_5);
+		int isUp = GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_5);
+		int isDown = GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_2);
+		int isLeft = GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_3);
+		int isRight = GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_4);
 		if(isUp == 0){
 			result = 1;
+		}
+		if(isDown == 0){
+			result = 2;
 		}
 		if(isLeft == 0){
 			result = 3;
