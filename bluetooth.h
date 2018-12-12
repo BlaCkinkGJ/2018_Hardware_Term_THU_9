@@ -7,11 +7,16 @@
 #include "stm32f10x_rcc.h"
 #include "stm32f10x_usart.h"
 
-void _Bluetooth_Execute(void);
+#include <stdio.h>  //sprintf
+#include <string.h> //strlen
+#include <stdlib.h> //atoi
+#include <time.h>   //initial_현재시각
+
+void _BT_Init(void);
 
 void _BT_RCC_Init(void);
-void _BT_USART1_Init(void);
-void _BT_USART2_Init(void);
+void _BT_GPIO_Init(void);
+void _BT_USART_Init(void);
 void _BT_NVIC_Init(void);
 
 #endif
