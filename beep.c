@@ -1,7 +1,6 @@
 #include "beep.h"
 
 void delay(int num){
-	num = num * 100000;
 	while(num--);
 }
 
