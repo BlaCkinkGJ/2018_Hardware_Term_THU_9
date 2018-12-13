@@ -5,8 +5,16 @@
 void pwm_init(PWM* pwm){
 	TIM_TimeBaseInitTypeDef tim_base_init_struct;
 	TIM_OCInitTypeDef tim_oc_init_struct;
+	GPIO_InitTypeDef gpio_init_struct;
+
+
+	RCC_APB2PeriphClockCmd(pwm->rcc_gpio, ENABLE);
+	gpio_init_struct.GPIO_Pin = pwm->gpio_pin;
+	gpio_init_struct.GPIO_Mode = GPIO_Mode_AF_PP;
+	gpio_init_struct.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(pwm->gpio_port, &gpio_init_struct);
 	
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4,ENABLE);
+	RCC_APB1PeriphClockCmd(pwm->rcc_timer,ENABLE);
 
 	tim_base_init_struct.TIM_Prescaler = (uint16_t)(SystemCoreClock/1000000)-1;
 	tim_base_init_struct.TIM_Period = 20000-1;

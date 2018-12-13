@@ -1,22 +1,7 @@
-#ifndef __PIPE_H__
-#define __PIPE_H__
+#ifndef __ULTRA_H___
+#define __ULTRA_H__
 
-#include <stdio.h>
-#include <stdbool.h>
-
-#include "stm32f10x.h"
-
-#include "core_cm3.h"
-#include "misc.h"
-
-#include "stm32f10x_gpio.h"
-#include "stm32f10x_rcc.h"
-#include "stm32f10x_usart.h"
-#include "stm32f10x_adc.h"
-#include "stm32f10x_exti.h"
-#include "stm32f10x_tim.h"
-#include "stm32f10x_dma.h"
-
+#include "universal.h"
 
 typedef struct _HRS04_VAR{
 	int cap_rising_edge;
@@ -58,7 +43,7 @@ void Triger_InputSig(HRS04_VAR* sen){
 	GPIO_ResetBits(sen->trig_port, sen->trig_pin);
 }
 
-void setup(HRS04_VAR* sen)
+void ultra_setup(HRS04_VAR* sen)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 	NVIC_InitTypeDef NVIC_InitStructure;

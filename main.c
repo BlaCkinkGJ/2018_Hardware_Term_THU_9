@@ -1,22 +1,14 @@
 // flash load "D:\Hardware Experiment 3 2\THU09\Week10\flashclear.axf"
 // flash load "D:\Hardware Experiment 3 2\THU09\Week10\Debug\Week10.axf"
 
-#include "survo.h"
-#include "pipe.h"
-#include <stdbool.h>
+#include "universal.h"
+#include "ultra.h"
+#include "servo.h"
 
 HRS04_VAR ultra1;
 // HRS04_VAR ultra2;
 // HRS04_VAR ultra3;
 
-
-static void pwm_setting(){
-	PWM pwm;
-	pwm.OCMode = TIM_OCMode_PWM1;
-	pwm.rcc_timer = RCC_APB1Periph_TIM4;
-	pwm.timer = TIM4;
-	pwm_init(&pwm);
-}
 
 /// For ultra1
 void TIM3_IRQHandler(HRS04_VAR* sen){
@@ -39,56 +31,54 @@ void TIM3_IRQHandler(HRS04_VAR* sen){
 
 static void ultra_init(){
 	init_hrsd04_variable(&ultra1);
-	ultra1.trig_port = GPIOA;
-	ultra1.trig_pin = GPIO_Pin_7;
-	ultra1.timer = TIM3;
-	ultra1.timer_port = GPIOA;
-	ultra1.timer_pin = GPIO_Pin_8;
+	ultra1.trig_port         = GPIOA;
+	ultra1.trig_pin          = GPIO_Pin_7;
+	ultra1.timer             = TIM3;
+	ultra1.timer_port        = GPIOA;
+	ultra1.timer_pin         = GPIO_Pin_8;
 	ultra1.timer_inp_channel = TIM_Channel_1;
-	ultra1.timer_cc_channel = TIM_IT_CC1;
-	ultra1.timer_ccip = TIM_CCER_CC1P;
-	ultra1.timer_rcc = RCC_APB1Periph_TIM3;
-	ultra1.timer_irq = TIM3_IRQn;
+	ultra1.timer_cc_channel  = TIM_IT_CC1;
+	ultra1.timer_ccip        = TIM_CCER_CC1P;
+	ultra1.timer_rcc         = RCC_APB1Periph_TIM3;
+	ultra1.timer_irq         = TIM3_IRQn;
 }
 
-void loop(void)
+static void pwm_setting(){
+	PWM pwm;
+	pwm.OCMode    = TIM_OCMode_PWM1;
+	pwm.rcc_timer = RCC_APB1Periph_TIM4;
+	pwm.timer     = TIM4;
+	pwm.rcc_gpio  = RCC_APB2Periph_GPIOB;
+	pwm.gpio_port = GPIOB;
+	pwm.gpio_pin  = GPIO_Pin_8;
+	pwm_init(&pwm);
+}
+
+static void setup(void){
+    ultra_init();
+	pwm_setting();
+	ultra_setup(&ultra1);
+
+    ultra1.capture = true;
+    Triger_InputSig(&ultra1);
+}
+
+static void loop(void)
 {
-	int i = 0;
-
-	if(!i){
-		ultra1.capture = 1;
-		Triger_InputSig(&ultra1);
-		i = 1;
-	}
-	/*
-		if(!_3){
-			bCapture = 0;
-			init_hrsd04_variable();
-		}
-	*/
-
-	if(ultra1.distance !=0)
-	{
-		ultra1.distance = 0;
-		if(ultra1.capture)
-		{
-			if( (ultra1.pulse_width*17/100) < 1000)
-				GPIO_SetBits(GPIOD, GPIO_Pin_7);
-			else
-				GPIO_ResetBits(GPIOD, GPIO_Pin_7);
+	if(ultra1.distance != false){ // distance analysis
+        int dist_mm = (ultra1.pulse_width*17/100);
+		ultra1.distance = false;
+		if(ultra1.capture){ // if capture is enabled
 			Triger_InputSig(&ultra1);
 		}
 	}
-
-
-	delay_ms(1);
+	delay_ms(500);
 }
 
 
 int main(void){
-	ultra_init();
-	pwm_setting();
-	setup(&ultra1);
-
-	while(1) loop();
+    setup();
+    while(1){
+        loop();
+    }
 }
