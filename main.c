@@ -1,18 +1,22 @@
 // flash load "D:\Hardware Experiment 3 2\THU09\Week10\flashclear.axf"
 // flash load "D:\Hardware Experiment 3 2\THU09\Week10\Debug\Week10.axf"
 
-
-/*!
-  * @file    arch/main.c
-  * @brief   string Control API
-  */
-
-
+#include "survo.h"
 #include "pipe.h"
+#include <stdbool.h>
 
 HRS04_VAR ultra1;
 // HRS04_VAR ultra2;
 // HRS04_VAR ultra3;
+
+
+static void pwm_setting(){
+	PWM pwm;
+	pwm.OCMode = TIM_OCMode_PWM1;
+	pwm.rcc_timer = RCC_APB1Periph_TIM4;
+	pwm.timer = TIM4;
+	pwm_init(&pwm);
+}
 
 /// For ultra1
 void TIM3_IRQHandler(HRS04_VAR* sen){
@@ -33,7 +37,7 @@ void TIM3_IRQHandler(HRS04_VAR* sen){
 	} //  end if
 }
 
-static void init(){
+static void ultra_init(){
 	init_hrsd04_variable(&ultra1);
 	ultra1.trig_port = GPIOA;
 	ultra1.trig_pin = GPIO_Pin_7;
@@ -82,12 +86,9 @@ void loop(void)
 
 
 int main(void){
-	init();
-
+	ultra_init();
+	pwm_setting();
 	setup(&ultra1);
 
-	while(1)
-	{
-		loop();
-	}
+	while(1) loop();
 }
