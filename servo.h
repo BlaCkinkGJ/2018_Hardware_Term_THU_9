@@ -13,7 +13,6 @@ typedef struct _PWM{
 
 }PWM;
 
-void delay(int); // This have to change if you merge this code
 
 void pwm_init(PWM*);
 void change_pwm_cycle(PWM*, int);

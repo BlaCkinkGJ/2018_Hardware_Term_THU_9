@@ -17,4 +17,5 @@
 #include "stm32f10x_tim.h"
 #include "stm32f10x_dma.h"
 
+#include "delay.h"
 #endif
