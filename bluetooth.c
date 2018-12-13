@@ -136,17 +136,27 @@ void USART2_IRQHandler(){
 }
 
 void send_int_toUsart1(int value){
-    char data[10];
+    char data[10]='/0';
     int idx = 0;
 
     sprintf(data, "%d", value);
 	/*
+	int count = 0;
 	int quot = value;
 	int rem = 0;
+	char temp;
+
 	while(!quot) {
 		rem = quot%10;
 		quot = quot/10;
 		data[idx++] = '0' + rem;
+		count++;
+	}
+	
+	for (idx = 0; idx < count/2; idx++) {		//역순 바로잡기
+		temp = data[idx];
+		data[idx] = data[(count-1) - idx];
+		data[(count - 1) - idx] = temp;
 	}
 	data[idx] = '\0';
 	*/
@@ -162,7 +172,7 @@ void send_int_toUsart1(int value){
 }
 
 void send_int_toUsart2(int value){
-    char data[10];
+    char data[10]='/0';
     int idx = 0;
 
     sprintf(data, "%d", value);
@@ -178,7 +188,7 @@ void send_int_toUsart2(int value){
 }
 
 int receive_int_byUsart1(){
-	char data[10];
+	char data[10]='/0';
 	int idx = 0;
 	int value = 0;
 
@@ -192,7 +202,7 @@ int receive_int_byUsart1(){
 }
 
 int receive_int_byUsart2(){
-	char data[10];
+	char data[10]='/0';
 	int idx = 0;
 	int value = 0;
 
