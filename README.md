@@ -1,2 +1,3 @@
-# 2018_Hardware_Term_THU_9
-PNU 2018 Hardware Term
+# 2018 Pusan National Universiry Hardware Term Project
+
+Include Modules: HC-SR04P(Doesn't have oscillator), Relay Module, Laser Module, PIR Sensor, Buzzer
