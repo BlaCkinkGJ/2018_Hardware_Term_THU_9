@@ -4,6 +4,7 @@
 #include "universal.h"
 #include "ultra.h"
 #include "servo.h"
+#include "bluetooth.h"
 
 #define FORWARD 1
 #define BACKWARD -1
@@ -11,8 +12,35 @@
 HRS04_VAR ultra1;
 // HRS04_VAR ultra2;
 // HRS04_VAR ultra3;
-
 PWM pwm;
+BlueConfig blue;
+
+/// IRQHandler Setting
+void USART1_IRQHandler(){
+	unsigned char recvbuf = '\0';
+
+	while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+		; // Wait the USART1 Tx to SET
+	recvbuf = (unsigned char)USART_ReceiveData(USART1);
+	USART_SendData(USART1, recvbuf); // ECHO
+	USART_SendData(USART2, recvbuf); // Send to bluetooth
+
+	USART_ClearITPendingBit(USART1, USART_IT_RXNE);
+}
+
+void USART2_IRQHandler(){
+	unsigned char recvbuf = '\0';
+
+	while(USART_GetFlagStatus(USART2, USART_FLAG_TXE) == RESET)
+		; // Wait the USART2 Tx to SET
+	recvbuf = (unsigned char)USART_ReceiveData(USART2); // ECHO
+	USART_SendData(USART1, recvbuf); // Send to bluetooth
+
+    blue.isValid = true;
+
+	USART_ClearITPendingBit(USART2, USART_IT_RXNE);
+}
+
 
 /// For ultra1
 void TIM3_IRQHandler(void){
@@ -64,10 +92,24 @@ int direction = FORWARD;
 static void setup(void){
     SystemInit();
     ultra_init();
+    bluetooth_init(&blue);
     pwm_setting();
     pwm_init(&pwm);
     ultra_setup(&ultra1);
+    { // initailze the buzzer and PIR sensor
+        GPIO_InitTypeDef gpio_init_struct;
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD, ENABLE);
+        gpio_init_struct.GPIO_Mode = GPIO_Mode_Out_PP;
+        gpio_init_struct.GPIO_Pin = (GPIO_Pin_2|GPIO_Pin_3|GPIO_Pin_4|GPIO_Pin_7);
+        gpio_init_struct.GPIO_Speed = GPIO_Speed_50MHz;
+        GPIO_Init(GPIOD, &gpio_init_struct);
 
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+        gpio_init_struct.GPIO_Mode = GPIO_Mode_IPD;
+        gpio_init_struct.GPIO_Pin = (GPIO_Pin_1);
+        gpio_init_struct.GPIO_Speed = GPIO_Speed_50MHz;
+        GPIO_Init(GPIOD, &gpio_init_struct);
+    }
     ultra1.capture = true;
     Triger_InputSig(&ultra1);
 }
@@ -75,6 +117,13 @@ static void setup(void){
 static void loop(void)
 {
     int isPeople = GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_1);
+    
+    if(blue.isATscan == false){
+        bluetooth_send_data("AT+BTSCAN", &blue);
+    }
+    else{
+        bluetooth_send_data("Hello World!!", &blue);
+    }
 
     if(isPeople == 0){
         GPIO_SetBits(GPIOD, GPIO_Pin_4);
@@ -125,18 +174,7 @@ static void loop(void)
 
 
 int main(void){
-    GPIO_InitTypeDef gpio_init_struct;
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD, ENABLE);
-    gpio_init_struct.GPIO_Mode = GPIO_Mode_Out_PP;
-    gpio_init_struct.GPIO_Pin = (GPIO_Pin_2|GPIO_Pin_3|GPIO_Pin_4|GPIO_Pin_7);
-    gpio_init_struct.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOD, &gpio_init_struct);
 
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
-    gpio_init_struct.GPIO_Mode = GPIO_Mode_IPD;
-    gpio_init_struct.GPIO_Pin = (GPIO_Pin_1);
-    gpio_init_struct.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOD, &gpio_init_struct);
 
     setup();
     while(true){

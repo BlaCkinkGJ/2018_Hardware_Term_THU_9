@@ -3,6 +3,10 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h> 
 
 #include "stm32f10x.h"
 
