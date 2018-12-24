@@ -4,7 +4,7 @@
 #include "universal.h"
 
 typedef struct _PWM{
-    uint16_t       OCMode; // TIM_OCMode_PWM1
+    uint16_t       OCMode;
     uint32_t       rcc_timer;
     TIM_TypeDef*   timer;
     uint32_t       rcc_gpio;

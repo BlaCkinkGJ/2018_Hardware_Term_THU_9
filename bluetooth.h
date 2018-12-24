@@ -9,6 +9,6 @@ typedef struct _BLUE_CONFIG{
 }BlueConfig;
 
 void bluetooth_init(BlueConfig *config);
-void bluetooth_send_data(const char *data, BlueConfig *config);
+int  bluetooth_send_data(const char *data, BlueConfig *config);
 
 #endif
