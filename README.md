@@ -6,8 +6,10 @@
 - STM32F105
 
 ### 사용되는 모듈
-- HC-SR04P(oscillator 없는 장치)
+- HC-SR04P Ultrasonic Module(oscillator 없는 장치)
+- FB755AC Bluetooth Module
 - Relay Module
+- Servo Motor
 - Laser Module
 - PIR Sensor
 - Buzzer
