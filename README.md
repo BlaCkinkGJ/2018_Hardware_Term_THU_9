@@ -3,7 +3,7 @@
 ## Korean(한국어) ##
 
 ### 기반 장치
-- STM32F105
+- STM32F107 (https://www.icbanq.com/P005669760)
 
 ### 사용되는 모듈
 - HC-SR04P Ultrasonic Module(oscillator 없는 장치)
